@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Valentín 💙</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Book Antiqua", serif;
+  overflow: hidden;
+}
+
+.sobre {
+  width: 220px;
+  height: 150px;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #3a7bd5;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.sobre:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0,0,0,.35);
+}
+
+.carta {
+  position: fixed;
+  width: 330px;
+  background: #ffffffee;
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,.3);
+  transform: scale(0);
+  transition: transform 0.8s ease;
+  z-index: 20;
+}
+
+.carta.activa {
+  transform: scale(1);
+}
+
+.carta h2 {
+  color: #357abd;
+  font-size: 20px;
+  margin: 0 0 15px 0;
+}
+
+.carta p {
+  color: #357abd;
+  font-size: 18px;
+  margin: 15px 0;
+}
+
+.botones {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+button {
+  padding: 12px 25px;
+  border-radius: 30px;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  font-weight: bold;
+}
+
+#si {
+  background: #6fb1ff;
+  color: white;
+  flex: 1;
+}
+
+#si:hover {
+  background: #5a9fe0;
+  transform: scale(1.05);
+}
+
+#no {
+  background: #b3d9ff;
+  color: #034078;
+  flex: 1;
+}
+
+#no:hover {
+  background: #9ecbff;
+}
+
+.snoopy {
+  width: 160px;
+  margin: 15px 0;
+  animation: baile 0.8s infinite alternate;
+}
+
+@keyframes baile {
+  from { transform: translateY(0) rotate(-2deg); }
+  to { transform: translateY(-15px) rotate(2deg); }
+}
+
+.confeti {
+  position: fixed;
+  pointer-events: none;
+  font-size: 30px;
+  animation: caer 3s linear forwards;
+}
+
+@keyframes caer {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sobre" id="sobre" onclick="abrirCarta()">Tocame 💙</div>
+
+<div class="carta" id="carta">
+  <h2>¿Querés ser mi San Valentín?</h2>
+  <img src="https://i.imgur.com/6o5VQ7n.png" class="snoopy" alt="Snoopy">
+  <div class="botones">
+    <button id="si" onclick="aceptar()">SÍ 💙</button>
+    <button id="no" onclick="no()">NO 🙄</button>
+  </div>
+</div>
+
+<audio id="musica">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let escala = 1;
+
+function abrirCarta(){
+  document.getElementById("sobre").style.display = "none";
+  document.getElementById("carta").classList.add("activa");
+}
+
+function no(){
+  escala += 0.3;
+  document.getElementById("si").style.transform = `scale(${escala})`;
+  document.getElementById("no").style.transform = `scale(${Math.max(0.3, 1 - escala/5)})`;
+  
+  if(escala > 3) {
+    document.getElementById("no").style.display = "none";
+  }
+}
+
+function aceptar(){
+  const m = document.getElementById("musica");
+  m.currentTime = 45;
+  m.play().catch(e => console.log("Error de audio:", e));
+
+  document.getElementById("carta").innerHTML = `
+    <h2>💙💙💙</h2>
+    <p>Te amo en cada uno de los universos ✨</p>
+    <img src="https://media.giphy.com/media/13k4VSc3ngLPUY/giphy.gif" class="snoopy" alt="Snoopy bailando">
+  `;
+
+  for(let i = 0; i < 30; i++){
+    crearConfeti();
+  }
+}
+
+function crearConfeti(){
+  const confeti = document.createElement("div");
+  confeti.className = "confeti";
+  confeti.innerHTML = "💙";
+  confeti.style.left = Math.random() * 100 + "vw";
+  confeti.style.top = "-30px";
+  confeti.style.delay = Math.random() * 0.3 + "s";
+  document.body.appendChild(confeti);
+  
+  setTimeout(() => confeti.remove(), 3000);
+}
+</script>
+
+</body>
+  </html>
